@@ -7,14 +7,19 @@ spring:
     username: food_app
     password: food_app_dev
     driver-class-name: org.postgresql.Driver
-  
+
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: restaurant_service
 
   flyway:
     enabled: true
+    schemas: restaurant_service
+    default-schema: restaurant_service
 
 server:
   port: 8183

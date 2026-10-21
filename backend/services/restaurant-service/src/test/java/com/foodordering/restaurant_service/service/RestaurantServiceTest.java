@@ -22,70 +22,70 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {
 
-    @Mock
-    private RestaurantRepository restaurantRepository;
+        @Mock
+        private RestaurantRepository restaurantRepository;
 
-    @InjectMocks
-    private RestaurantService restaurantService;
+        @InjectMocks
+        private RestaurantService restaurantService;
 
-    private Restaurant restaurant;
+        private Restaurant restaurant;
 
-    @BeforeEach
-    void setUp() {
-        restaurant = new Restaurant(
-                "Spice Garden",
-                "Indian cuisine",
-                "Indore, Madhya Pradesh");
-    }
+        @BeforeEach
+        void setUp() {
+                restaurant = new Restaurant(
+                                "Spice Garden",
+                                "Indian cuisine",
+                                "Indore, Madhya Pradesh");
+        }
 
-    @Test
-    void createShouldReturnSavedRestaurant() {
-        when(restaurantRepository.save(any(Restaurant.class)))
-                .thenAnswer(invocation -> {
-                    Restaurant saved = invocation.getArgument(0);
+        @Test
+        void createShouldReturnSavedRestaurant() {
+                when(restaurantRepository.save(any(Restaurant.class)))
+                                .thenAnswer(invocation -> {
+                                        Restaurant saved = invocation.getArgument(0);
 
-                    // Simulate values normally assigned by persistence.
-                    return saved;
-                });
+                                        // Simulate values normally assigned by persistence.
+                                        return saved;
+                                });
 
-        RestaurantResponse response = restaurantService.create(
-                new CreateRestaurantRequest(
-                        "Spice Garden",
-                        "Indian cuisine",
-                        "Indore, Madhya Pradesh"));
+                RestaurantResponse response = restaurantService.create(
+                                new CreateRestaurantRequest(
+                                                "Spice Garden",
+                                                "Indian cuisine",
+                                                "Indore, Madhya Pradesh"));
 
-        assertEquals("Spice Garden", response.name());
-        assertEquals("Indore, Madhya Pradesh", response.address());
-        assertTrue(response.active());
+                assertEquals("Spice Garden", response.name());
+                assertEquals("Indore, Madhya Pradesh", response.address());
+                assertTrue(response.active());
 
-        verify(restaurantRepository).save(any(Restaurant.class));
-    }
+                verify(restaurantRepository).save(any(Restaurant.class));
+        }
 
-    @Test
-    void findByIdShouldThrowWhenRestaurantDoesNotExist() {
-        UUID id = UUID.randomUUID();
+        @Test
+        void findByIdShouldThrowWhenRestaurantDoesNotExist() {
+                UUID id = UUID.randomUUID();
 
-        when(restaurantRepository.findById(id))
-                .thenReturn(Optional.empty());
+                when(restaurantRepository.findById(id))
+                                .thenReturn(Optional.empty());
 
-        assertThrows(
-                RestaurantNotFoundException.class,
-                () -> restaurantService.findById(id));
-    }
+                assertThrows(
+                                RestaurantNotFoundException.class,
+                                () -> restaurantService.findById(id));
+        }
 
-    @Test
-    void deactivateShouldSetRestaurantInactive() {
-        UUID id = UUID.randomUUID();
+        @Test
+        void deactivateShouldSetRestaurantInactive() {
+                UUID id = UUID.randomUUID();
 
-        when(restaurantRepository.findById(id))
-                .thenReturn(Optional.of(restaurant));
+                when(restaurantRepository.findById(id))
+                                .thenReturn(Optional.of(restaurant));
 
-        when(restaurantRepository.save(restaurant))
-                .thenReturn(restaurant);
+                when(restaurantRepository.save(restaurant))
+                                .thenReturn(restaurant);
 
-        RestaurantResponse response = restaurantService.deactivate(id);
+                RestaurantResponse response = restaurantService.deactivate(id);
 
-        assertFalse(response.active());
-        verify(restaurantRepository).save(restaurant);
-    }
+                assertFalse(response.active());
+                verify(restaurantRepository).save(restaurant);
+        }
 }

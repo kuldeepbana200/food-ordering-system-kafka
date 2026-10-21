@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: customer-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/food_ordering
+    username: food_app
+    password: food_app_dev
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: customer_service
+
+  flyway:
+    enabled: true
+    schemas: customer_service
+    default-schema: customer_service
+
+server:
+  port: 8184
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
